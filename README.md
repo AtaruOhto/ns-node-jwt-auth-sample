@@ -9,7 +9,7 @@
 ## Prerequisite
 
 
-In order to run this example, MySQL server is needed to be run.
+In order to run this example, MySQL server is needed to be run and database named 'sample' created before.
 Install MySQL and edit the following MySQL connection code in the *index.ts* if needed.
 
 
