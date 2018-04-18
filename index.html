@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div>
+    <label for="name ">Name</label>
+    <input type="text" class="js-name" id="name "></label>
+    <label for="pass">Password</label>
+    <input type="password" class="js-pass" id="pass"/>
+    <button class="js-submit">Set Token</button>
+</div>
+<br/>
+
+<div>
+    <button class="js-secret-submit">Consume API which requires JWT token.</button>
+</div>
+
+<div>
+    <button class="js-clear-token">Clear Token</button>
+</div>
+
+<script>
+    axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';
+    axios.defaults.headers['Content-type'] = 'application/json';
+
+    document.querySelector('.js-submit').addEventListener('click', function () {
+        var name = document.querySelector('.js-name').value;
+        var password = document.querySelector('.js-pass').value;
+
+        axios({
+            url: 'http://localhost:3000',
+            method: 'post',
+            timeout: 1000,
+            data: {
+                name: name,
+                password: password
+            }
+        }).then(function (response) {
+            localStorage.setItem('token', response.data);
+            console.log('Token: ' + response.data + ' was set!');
+            alert('Token: ' + response.data + ' was set!');
+        }).catch(function (error) {
+            alert(error);
+        });
+    });
+
+    document.querySelector('.js-secret-submit').addEventListener('click', function () {
+        axios({
+            url: 'http://localhost:3000/secret',
+            method: 'get',
+            timeout: 1000,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(function (response) {
+            alert(response.data);
+        }).catch(function (error) {
+            alert(error);
+        });
+    });
+
+    document.querySelector('.js-clear-token').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        alert('Token was cleared.')
+    })
+
+</script>
+</body>
+</html>
